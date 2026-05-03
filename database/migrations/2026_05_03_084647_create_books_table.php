@@ -25,25 +25,7 @@ return new class extends Migration
 
             $table->foreign('bookshelf_id')
             ->references('id')
-            ->on('bookshelf')
-            ->onDelete('cascade')
-            ->onUpdate('cascade');
-
-        }); Schema::create('books', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->string('author');
-            $table->year('year');
-            $table->string('publisher');
-            $table->string('city');
-            $table->string('cover')->nullable();
-            // $table->foreignId('bookshelf_id')->constrained();
-            $table->unsignedBigInteger('bookshelf_id');
-            $table->timestamps();
-
-            $table->foreign('bookshelf_id')
-            ->references('id')
-            ->on('bookshelf')
+            ->on('bookshelves')
             ->onDelete('cascade')
             ->onUpdate('cascade');
 

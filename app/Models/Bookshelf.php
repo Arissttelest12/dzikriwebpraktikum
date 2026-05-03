@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bookshelf extends Model
 {
-    protected $table = 'bookshelfs';
+    protected $table = 'bookshelves';
     
     protected $fillable = [
         'code',

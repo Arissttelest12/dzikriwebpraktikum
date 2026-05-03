@@ -1,0 +1,127 @@
+//Route
+
+Route::middleware('role:mahasiswa')->group(function () {
+    Route::get('/buku/show', [BookController::class, 'show'])->name('books.show');
+});
+
+Route::middleware('role:pustakawan')->group(function () {
+    Route::get('/buku', [BookController::class, 'index'])->name('books');
+    Route::get('/buku/create', [BookController::class, 'create'])->name('books.create');
+    Route::post('/buku', [BookController::class, 'store'])->name('books.store');
+});
+
+//boosrstrap
+<?php
+
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Configuration\Middleware;
+//ini
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+
+return Application::configure(basePath: dirname(__DIR__))
+    ->withRouting(
+        web: __DIR__.'/../routes/web.php',
+        commands: __DIR__.'/../routes/console.php',
+        health: '/up',
+    )
+    ->withMiddleware(function (Middleware $middleware) {
+        //ini
+         $middleware->alias([
+        'role' => RoleMiddleware::class,
+        'permission' => PermissionMiddleware::class,
+        'role_or_permission' => RoleOrPermissionMiddleware::class,
+    ]);
+    })
+    ->withExceptions(function (Exceptions $exceptions) {
+        //
+    })->create();
+
+
+//Controller
+    public function edit($id)
+    {
+        $books = Book::findorFail($id);
+        $bookshelves = Bookshelf::all();
+
+        return view('books.edit', compact('books','bookshelves'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, $id)
+    {
+        $books = Book::findorFail($id);
+
+     $data = $request->validate([
+        'title' => 'required',
+        'author' => 'required',
+        'year' => 'required',
+        'publisher' => 'required',
+        'city' => 'required',
+        'bookshelf_id' => 'required',
+        'cover' => 'nullable|image'
+    ]);
+
+    // Cek jika upload cover baru
+    if ($request->hasFile('cover')) {
+        $file = $request->file('cover');
+        $filename = time().'.'.$file->getClientOriginalExtension();
+        $file->storeAs('public/cover_buku', $filename);
+
+        $data['cover'] = $filename;
+    }
+
+    $books->update($data);
+
+    return redirect()->route('books');
+    }
+
+
+    public function destroy($id)
+    {
+        $book = Book::findOrFail($id);
+
+        $book->delete();
+
+        return redirect()->route('books')->with('success', 'Data berhasil dihapus');
+    }
+
+// tombol edit
+   <td>
+    <div class="flex items-center gap-2">
+
+        <a href="{{ route('books.edit', $book->id) }}"
+           class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">
+            ✏️ Edit
+        </a>
+
+        <form action="{{ route('books.destroy', $book->id) }}" method="POST">
+            @csrf
+            @method('DELETE')
+
+            <button type="submit"
+                onclick="return confirm('Yakin ingin menghapus buku ini?')"
+                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">
+                🗑️ Hapus
+            </button>
+        </form>
+    </div>
+</td>
+
+
+//navigation
+    @role('pustakawan')
+    <x-nav-link :href="route('books')" :active="request()->routeIs('books')">
+    {{ __('Buku') }}
+    </x-nav-link>
+    @endrole
+
+    @role('mahasiswa')
+    <x-nav-link :href="route('books.show')" :active="request()->routeIs('books.show')">
+    {{ __('Buku') }}
+    </x-nav-link>
+    @endrole

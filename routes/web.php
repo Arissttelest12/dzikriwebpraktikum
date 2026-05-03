@@ -26,6 +26,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/buku', [BookController::class, 'index'])->name('books');
+    Route::get('/buku/create', [BookController::class, 'create'])->name('books.create');
+    Route::post('/buku', [BookController::class, 'store'])->name('books.store');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/buku', [BookController::class, 'index'])->name('books');
+    Route::get('/buku/create', [BookController::class, 'create'])->name('books.create');
+    Route::post('/buku', [BookController::class, 'store'])->name('books.store');
+});
 require __DIR__.'/auth.php';

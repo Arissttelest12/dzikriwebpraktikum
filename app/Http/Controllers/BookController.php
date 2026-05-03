@@ -22,47 +22,66 @@ class BookController extends Controller
      */
     public function create()
     {
-        $bookshelf = Bookshelf::all();
-        return view('books.create', compact('bookshelf'));
+        $bookshelves = Bookshelf::all();
+        return view('books.create', compact('bookshelves'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+   public function store(Request $request)
     {
-        //
+    $data = $request->validate([
+        'title' => 'required',
+        'author' => 'required',
+        'year' => 'required',
+        'publisher' => 'required',
+        'city' => 'required',
+        'bookshelf_id' => 'required',
+        'cover' => 'nullable|image'
+    ]);
+
+    if ($request->hasFile('cover')) {
+        $file = $request->file('cover');
+        $filename = time().'.'.$file->getClientOriginalExtension();
+        $file->storeAs('public/cover_buku', $filename);
+        $data['cover'] = $filename;
+    }
+
+    Book::create($data);
+
+    return redirect()->route('books');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show()
     {
-        //
+
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+
     }
 }

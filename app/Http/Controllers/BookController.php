@@ -22,7 +22,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        $bookshelves = Bookshelf::all();
+        $bookshelves = Bookshelf::pluck('name', 'id');
         return view('books.create', compact('bookshelves'));
     }
 

@@ -25,9 +25,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/buku', [BookController::class, 'index'])->name('books');
-    Route::get('/buku/create', [BookController::class, 'create'])->name('books.create');
-    Route::post('/buku', [BookController::class, 'store'])->name('books.store');
 });
 
 Route::middleware('auth')->group(function () {

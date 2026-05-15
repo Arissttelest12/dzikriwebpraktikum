@@ -16,14 +16,17 @@ class RoleSeeder extends Seeder
     // Role
     $pustakawan = Role::create(['name' => 'pustakawan']);
     $mahasiswa = Role::create(['name' => 'mahasiswa']);
+    // $rektor = Role::create(['name' => 'rektor']);
 
     // Permission
+    $createBook = Permission::create(['name' => 'create_book']);
     $editBook = Permission::create(['name' => 'edit_book']);
     $editUser = Permission::create(['name' => 'edit_user']);
     $viewBook = Permission::create(['name' => 'view_book']);
 
     // Relasi
-    $pustakawan->givePermissionTo([$editBook, $editUser, $viewBook]);
+    $pustakawan->givePermissionTo([$editBook, $editUser, $viewBook, $createBook]);
     $mahasiswa->givePermissionTo($viewBook);
+    // $rektor->givePermissionTo()
     }
 }

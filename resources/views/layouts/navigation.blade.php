@@ -15,9 +15,19 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @role('pustakawan')
                     <x-nav-link :href="route('books')" :active="request()->routeIs('books')">
                         {{ __('Buku') }}
                     </x-nav-link>
+                    @endrole
+
+                     <!-- @role('mahasiswa')
+                    <x-nav-link :href="route('books.show')" :active="request()->routeIs('books.show')">
+                        {{ __('Buku') }}
+                    </x-nav-link>
+                    @endrole -->
+
                 </div>
             </div>
 

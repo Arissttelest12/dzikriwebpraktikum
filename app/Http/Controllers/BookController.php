@@ -22,7 +22,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        $bookshelves = Bookshelf::pluck('name', 'id');
+        $bookshelves = Bookshelf::all();
         return view('books.create', compact('bookshelves'));
     }
 
@@ -40,16 +40,13 @@ class BookController extends Controller
         'bookshelf_id' => 'required',
         'cover' => 'nullable|image'
     ]);
-
     if ($request->hasFile('cover')) {
         $file = $request->file('cover');
         $filename = time().'.'.$file->getClientOriginalExtension();
         $file->storeAs('public/cover_buku', $filename);
         $data['cover'] = $filename;
     }
-
     Book::create($data);
-
     return redirect()->route('books');
     }
 
@@ -58,7 +55,8 @@ class BookController extends Controller
      */
     public function show()
     {
-
+        $books = Book::with('bookshelf')->get();
+        return view('books.show', compact('books'));
     }
 
     /**
@@ -66,7 +64,9 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-
+        $books = Book::findOrFail($id);
+        $bookshelves = Bookshelf::all();
+        return view('books.edit', compact('books', 'bookshelves'));
     }
 
     /**
@@ -74,6 +74,24 @@ class BookController extends Controller
      */
     public function update(Request $request, $id)
     {
+    $books = Book::findOrFail($id);
+       $data = $request->validate([
+        'title' => 'required',
+        'author' => 'required',
+        'year' => 'required',
+        'publisher' => 'required',
+        'city' => 'required',
+        'bookshelf_id' => 'required',
+        'cover' => 'nullable|image'
+    ]);
+    if ($request->hasFile('cover')) {
+        $file = $request->file('cover');
+        $filename = time().'.'.$file->getClientOriginalExtension();
+        $file->storeAs('public/cover_buku', $filename);
+        $data['cover'] = $filename;
+    }
+    Book::update($data);
+    return redirect()->route('books');
 
     }
 

@@ -7,9 +7,6 @@
     
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="mb-6">
-                <x-primary-button tag="a" href="{{ route('books.create')}}">Tambah Data Buku</x-primary-button>
-            </div>
             
             <x-table>
                 <x-slot name="header">
@@ -22,7 +19,6 @@
                         <th>Kota</th>
                         <th>Cover</th>
                         <th>Kode Rak</th>
-                        <th>Aksi</th>
 
                     </tr>
                 </x-slot>
@@ -45,7 +41,7 @@
                             @endif
                         </td>
                         <td>{{ $book->bookshelf->code }}-{{ $book->bookshelf->name }}</td>
-                        <td><x-primary-button tag="a" href="{{ route('books.edit', $book->id)}}">Edit</x-primary-button></td>
+
                     </tr>
                 @endforeach
             </x-table>

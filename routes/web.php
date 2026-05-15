@@ -27,9 +27,15 @@ Route::middleware('auth')->group(function () {
 
 });
 
-Route::middleware('auth')->group(function () {
+Route::middleware('role:pustakawan')->group(function () {
     Route::get('/buku', [BookController::class, 'index'])->name('books');
     Route::get('/buku/create', [BookController::class, 'create'])->name('books.create');
-    Route::post('/buku', [BookController::class, 'store'])->name('books.store');
+    Route::post('/buku/create/store', [BookController::class, 'store'])->name('books.store');
+    Route::get('/buku/edit/{id}', [BookController::class, 'edit'])->name('books.edit');
+    Route::put('/buku/create/update/{id}', [BookController::class, 'update'])->name('books.update');
 });
+
+// Route::middleware('role:mahasiswa')->group(function () {
+//     Route::get('/buku', [BookController::class, 'show'])->name('books.show');
+// });
 require __DIR__.'/auth.php';

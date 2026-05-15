@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\Bookshelf;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -90,7 +92,7 @@ class BookController extends Controller
         $file->storeAs('public/cover_buku', $filename);
         $data['cover'] = $filename;
     }
-    Book::update($data);
+    $books->update($data);
     return redirect()->route('books');
 
     }
@@ -100,6 +102,18 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
+        $books = Book::findOrFail($id);
 
+        Storage::delete('public/cover_buku/'.$books->cover);
+
+        $books->delete();
+        return redirect()->route('books');
+    }
+
+    public function print(){
+        $books = Book::all();
+
+        $pdf = Pdf::loadView('books.print', ['books'=>$books]);
+        return $pdf->stream('laporan_buku2026.pdf');
     }
 }

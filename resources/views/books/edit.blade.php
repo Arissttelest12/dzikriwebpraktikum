@@ -11,8 +11,9 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
 
-                <form method="PUT" action="{{ route('books.update', $books->id) }}" enctype="multipart/form-data" class="space-y-6">
+                <form method="POST" action="{{ route('books.update', $books->id) }}" enctype="multipart/form-data" class="space-y-6">
     @csrf
+    @method('PUT')
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
@@ -21,7 +22,7 @@
             <x-input-label for="title" value="Judul Buku"/>
             <x-text-input id="title" name="title" type="text"
                 class="mt-1 block w-full focus:ring-2 focus:ring-blue-500"
-                value="{{ old('title') }}" required/>
+                value="{{ old('title', $books->title) }}" required/>
             <x-input-error :messages="$errors->get('title')" class="mt-2"/>
         </div>
 
@@ -30,7 +31,7 @@
             <x-input-label for="author" value="Penulis"/>
             <x-text-input id="author" name="author" type="text"
                 class="mt-1 block w-full focus:ring-2 focus:ring-blue-500"
-                value="{{ old('author') }}" required/>
+                value="{{ old('author', $books->author) }}" required/>
             <x-input-error :messages="$errors->get('author')" class="mt-2"/>
         </div>
 
@@ -39,7 +40,7 @@
             <x-input-label for="year" value="Tahun Terbit"/>
             <x-text-input id="year" name="year" type="number"
                 class="mt-1 block w-full focus:ring-2 focus:ring-blue-500"
-                value="{{ old('year') }}" required/>
+                value="{{ old('year', $books->year) }}" required/>
             <x-input-error :messages="$errors->get('year')" class="mt-2"/>
         </div>
 
@@ -48,7 +49,7 @@
             <x-input-label for="publisher" value="Penerbit"/>
             <x-text-input id="publisher" name="publisher" type="text"
                 class="mt-1 block w-full focus:ring-2 focus:ring-blue-500"
-                value="{{ old('publisher') }}" required/>
+                value="{{ old('publisher', $books->publisher) }}" required/>
             <x-input-error :messages="$errors->get('publisher')" class="mt-2"/>
         </div>
 
@@ -57,7 +58,7 @@
             <x-input-label for="city" value="Kota Terbit"/>
             <x-text-input id="city" name="city" type="text"
                 class="mt-1 block w-full focus:ring-2 focus:ring-blue-500"
-                value="{{ old('city') }}" required/>
+                value="{{ old('city', $books->city) }}" required/>
             <x-input-error :messages="$errors->get('city')" class="mt-2"/>
         </div>
 
@@ -69,7 +70,7 @@
                 <option value="">-- Pilih Rak Buku --</option>
                 @foreach($bookshelves as $bookshelf)
                     <option value="{{ $bookshelf->id }}"
-                        {{ old('bookshelf_id') == $bookshelf->id ? 'selected' : '' }}>
+                        {{ old('bookshelf_id', $books->bookshelf_id) == $bookshelf->id ? 'selected' : '' }}>
                         {{ $bookshelf->code }} - {{ $bookshelf->name }}
                     </option>
                 @endforeach
@@ -88,7 +89,7 @@
         <!-- Preview -->
         <img id="preview" class="mt-3 hidden w-32 rounded shadow"/>
 
-        <x-input-error :messages="$errors->get('cover')" class="mt-2"/>
+        <x-input-error :messages="$errors->get('cover', $books->cover)" class="mt-2"/>
     </div>
 
     <!-- BUTTON -->
@@ -104,7 +105,7 @@
                 Save dan Simpan baru
             </x-primary-button>
 
-            <x-primary-button name="save" value="true">
+            <x-primary-button  value="true">
                 💾 Save
             </x-primary-button>
         </div>

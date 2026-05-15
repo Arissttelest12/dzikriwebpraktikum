@@ -9,6 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="mb-6">
                 <x-primary-button tag="a" href="{{ route('books.create')}}">Tambah Data Buku</x-primary-button>
+                <x-primary-button tag="a" href="{{ route('books.print')}}" target="blank">Print Data Buku</x-primary-button>
             </div>
             
             <x-table>
@@ -45,7 +46,14 @@
                             @endif
                         </td>
                         <td>{{ $book->bookshelf->code }}-{{ $book->bookshelf->name }}</td>
-                        <td><x-primary-button tag="a" href="{{ route('books.edit', $book->id)}}">Edit</x-primary-button></td>
+                        <td>
+                            <x-primary-button tag="a" href="{{ route('books.edit', $book->id)}}">Edit</x-primary-button>
+                            <form action="{{ route('books.destroy', $book->id) }}" method="post" onsubmit="return confirm('APAKAH YAKIN?');">
+                                @csrf
+                                @method('delete')
+                                <x-danger-button type="submit">Hapus</x-danger-button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </x-table>

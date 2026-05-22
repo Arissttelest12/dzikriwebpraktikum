@@ -31,6 +31,8 @@ Route::middleware('role:pustakawan')->group(function () {
     Route::get('/buku', [BookController::class, 'index'])->name('books');
     Route::get('/buku/create', [BookController::class, 'create'])->name('books.create');
     Route::get('/buku/print', [BookController::class, 'print'])->name('books.print');
+    Route::get('/buku/export', [BookController::class, 'export'])->name('books.export');
+    Route::post('/buku/import', [BookController::class, 'import'])->name('books.import');
 
     Route::post('/buku/create/store', [BookController::class, 'store'])->name('books.store');
     Route::get('/buku/edit/{id}', [BookController::class, 'edit'])->name('books.edit');

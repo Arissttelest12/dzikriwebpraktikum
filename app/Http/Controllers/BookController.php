@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BooksExport;
+use App\Imports\BooksImport;
 use App\Models\Book;
 use App\Models\Bookshelf;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BookController extends Controller
 {
@@ -115,5 +118,18 @@ class BookController extends Controller
 
         $pdf = Pdf::loadView('books.print', ['books'=>$books]);
         return $pdf->stream('laporan_buku2026.pdf');
+    }
+
+    public function export(){
+        return Excel::download(new BooksExport, 'data_buku.xlsx');
+    }
+
+    public function import(Request $request){
+            $request->validate([
+                'file' => 'required|max:10000|mimes:xlsx,xls',
+            ]);
+
+            Excel::import(new BooksImport, $request->file('file'));
+            return redirect()->route('books');
     }
 }

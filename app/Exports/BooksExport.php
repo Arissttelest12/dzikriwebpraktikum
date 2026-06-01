@@ -22,6 +22,8 @@ class BooksExport implements FromArray, WithHeadings,ShouldAutoSize
             'Penulis',
             'Tahun',
             'Penerbit',
+            'Kota',
+            'Rak ID',
         ];
     }
 }

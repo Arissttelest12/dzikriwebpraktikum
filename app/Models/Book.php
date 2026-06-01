@@ -34,6 +34,8 @@ class Book extends Model
             $books_filter[$i]['author'] = $books[$i]->author;
             $books_filter[$i]['year'] = $books[$i]->year;
             $books_filter[$i]['publisher'] = $books[$i]->publisher;
+            $books_filter[$i]['city'] = $books[$i]->city;
+            $books_filter[$i]['bookshelf_id'] = $books[$i]->bookshelf_id;
         }
         return $books_filter;
     }
